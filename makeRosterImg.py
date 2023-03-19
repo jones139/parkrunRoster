@@ -38,12 +38,12 @@ def getRosterData(htmlStr, columnNo=0, debug=False):
 
     rosterData = {'date': None,
                 "Run Director": [],
-                "Finish Tokens": [],
-                "Timekeeper": [], 
-                "Barcode Scanning": [],
-                "Marshal": [], 
+                "Event Day Course Check": [],
                 "Tail Walker":[],
-                "Event Day Course Check": []
+                "Finish Tokens": [],
+                "Barcode Scanning": [],
+                "Timekeeper": [], 
+                "Marshal": [],
     }
 
 
@@ -82,7 +82,8 @@ def getRosterData(htmlStr, columnNo=0, debug=False):
 def calcRosterStatus(rosterData, debug=False):
     '''
     Calculate the status red/amber/green for each role in the roster rosterData,
-    and an overall status for the roster
+    and an overall status for the roster.
+    The 'date' field is used for the overall status of the roster, which is the worst status of all the roles
     '''
     rosterStatus = {}
 
@@ -106,11 +107,11 @@ def calcRosterStatus(rosterData, debug=False):
 
 def status2ColourRGB(statusInt):
     if (statusInt == 0):
-        return((255,0,0))
+        return((180, 0, 0))
     elif (statusInt == 1):
         return((200, 200,0))
     elif (statusInt == 2):
-        return((0,128,0))
+        return((100,200,100))
     else:
         print("status2ColourName = invalid status %d" % statusInt)
         exit(-1)
@@ -128,7 +129,10 @@ def makeDashboardImage(rosterData, formatStr, outFile, debug=False):
     colW = imgW/2
     rowH = imgH / len(rosterData.keys())
     txtH = 18
-    fnt = PIL.ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", txtH)
+    txtMargin = 3
+    #fnt = PIL.ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", txtH)
+    fnt = PIL.ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeMono.ttf", txtH)
+    fntBold = PIL.ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf", txtH)
     bgCol = (220, 220, 220)
 
     if formatStr == "png":
@@ -139,27 +143,50 @@ def makeDashboardImage(rosterData, formatStr, outFile, debug=False):
         
         curY = 0
         # Overall
-        imgD.rectangle([0,curY,colW,rowH],fill=bgCol, outline=PIL.ImageColor.getrgb('blue'))
-        imgD.text((0,curY),"Volunteer Dashboard for Date:", fill=(0,0,0), font=fnt)
+        # Background colour
+        imgD.rectangle([0,curY,colW,rowH],fill=status2ColourRGB(rosterStatus['date']), outline=PIL.ImageColor.getrgb('blue'))
         imgD.rectangle([colW,curY,colW+colW,rowH],fill=status2ColourRGB(rosterStatus['date']), outline=PIL.ImageColor.getrgb('blue'))
-        imgD.text((colW,curY),rosterData['date'], fill=(0,0,0), font=fnt)
+        # Text
+        if (rosterStatus['date'] == STATUS_RED):
+            imgD.text((0+txtMargin,curY),"Volunteer Dashboard for:", fill=(255,255,255), font=fntBold)
+            imgD.text((colW+txtMargin,curY),rosterData['date'], fill=(255,255,255), font=fntBold)
+        else:
+            imgD.text((0+txtMargin,curY),"Volunteer Dashboard for:", fill=(0,0,0), font=fntBold)
+            imgD.text((colW+txtMargin,curY),rosterData['date'], fill=(0,0,0), font=fnt)
 
         for role in rosterData.keys():
             if (role!="date"):
                 curY += rowH
                 if (debug): print(role, curY)
-                imgD.rectangle([0,curY,colW,curY+rowH],fill=bgCol, outline=PIL.ImageColor.getrgb('blue'))
-                imgD.text((0,curY),role, fill=(0,0,0), font=fnt)
+                # Background Colour
+                imgD.rectangle([0,curY,colW,curY+rowH],fill=status2ColourRGB(rosterStatus[role]), outline=PIL.ImageColor.getrgb('blue'))
                 imgD.rectangle([colW,curY,colW+colW,curY+rowH],fill=status2ColourRGB(rosterStatus[role]), outline=PIL.ImageColor.getrgb('blue'))
+                # Role Text
+                if (rosterStatus[role] == STATUS_RED):
+                    imgD.text((0+txtMargin,curY),role, fill=(255,255,255), font=fntBold)
+                else:
+                    imgD.text((0+txtMargin,curY),role, fill=(0,0,0), font=fntBold)
+                # Volunteer Name Text
                 txtY = curY
                 for roleName in rosterData[role]:
                     if (debug): print(roleName, txtY)
-                    imgD.text((colW,txtY),roleName, fill=(0,0,0), font=fnt)
+                    if (rosterStatus[role] == STATUS_RED):
+                        imgD.text((colW+txtMargin,txtY),roleName, fill=(255,255,255), font=fnt)
+                    else:
+                        imgD.text((colW+txtMargin,txtY),roleName, fill=(0,0,0), font=fnt)
                     txtY += txtH
 
         if (debug): img.show()
         img.save(outFile, formatStr)
         print("Image saved fo file %s" % outFile)
+
+    elif formatStr == "svg":
+        print("Making SVG Image")
+        print("**** SORRY - NOT IMPLEMENTED - not doing anything ****")
+        
+    else:
+        print("***** Invalid Format String %s - not doing anyting *****" % formatStr)
+
 
 
 
