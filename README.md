@@ -1,5 +1,8 @@
 # parkrunRoster
-A tool to generate a traffic light dashboard showing the state of a Parkrun volunteer roster
+A tool to generate a traffic light dashboard showing the state of a Parkrun volunteer roster.
+Rows are coloured red if there are less than the required minimum number of volunteers.
+Rows are coloured yellow if there are less than the preferred number of volunteers.
+Rows are green if there are at least teh preferred number of volunteers registered.
 
 ![Example Dashboard Image](https://github.com/jones139/parkrunRoster/blob/main/roster_hartlepool.png?raw=true)
 
@@ -33,6 +36,12 @@ A tool to generate a traffic light dashboard showing the state of a Parkrun volu
   Note that make start starts the app with automatic re-starting, so it will re-start even if you re-boot the computer.  To stop it do 'make stop'
 
   For debugging, make logs is useful.
+
+
+# Things to Do
+   - Make the number of marshals, timekeepers etc. required a function of which parkrun is selected
+   - Make the output prettier
+   - Add some text to the web site to explain what it does and what the colours mean.
 
 
 
