@@ -131,8 +131,10 @@ def makeDashboardImage(rosterData, formatStr, outFile, debug=False):
     txtH = 18
     txtMargin = 3
     #fnt = PIL.ImageFont.truetype("Pillow/Tests/fonts/FreeMono.ttf", txtH)
-    fnt = PIL.ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeMono.ttf", txtH)
-    fntBold = PIL.ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf", txtH)
+    #fnt = PIL.ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeMono.ttf", txtH)
+    #fntBold = PIL.ImageFont.truetype("/usr/share/fonts/truetype/freefont/FreeMonoBold.ttf", txtH)
+    fnt = PIL.ImageFont.truetype("FreeMono.ttf", txtH)
+    fntBold = PIL.ImageFont.truetype("FreeMonoBold.ttf", txtH)
     bgCol = (220, 220, 220)
 
     if formatStr == "png":
