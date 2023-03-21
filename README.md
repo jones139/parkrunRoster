@@ -28,6 +28,11 @@ A tool to generate a traffic light dashboard showing the state of a Parkrun volu
   - restart nginx (system nginx restart)
   - run certbot to create letsencrypt certificates for the new site
   - restart nginx (at this point I am getting 502 Bad Gateway errors).
+  ...then it should work....
+
+  Note that make start starts the app with automatic re-starting, so it will re-start even if you re-boot the computer.  To stop it do 'make stop'
+
+  For debugging, make logs is useful.
 
 
 
