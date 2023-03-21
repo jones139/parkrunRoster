@@ -197,68 +197,68 @@ if __name__ == "__main__":
     print("makeRosterImg.main()")
 
 
-ap = argparse.ArgumentParser()
-ap.add_argument("-d", "--debug",
-                help="produce verbose output for debugging",
-                action="store_true")
-ap.add_argument("-p", "--parkrun",
-                help="parkrun name - defaults to 'hartlepool'")
-ap.add_argument("-c", "--column", default=0,
-                help="Table Column Number to analyse (Defaults to zero)")
-ap.add_argument("-i", "--inFile",
-                help="Input File Name for future roster html file (defaults to futureroster_<parkrun>.html)")
-ap.add_argument("-o", "--outFile",
-                help="Output Filename root (defaults to roster_<parkrun>")
-ap.add_argument("-f", "--format",
-                help="output format - defaults to 'png'")
-ap.add_argument("--dl",
-                help="Download the roster from the web site rather than loading from file",
-                action="store_true")
+    ap = argparse.ArgumentParser()
+    ap.add_argument("-d", "--debug",
+                    help="produce verbose output for debugging",
+                    action="store_true")
+    ap.add_argument("-p", "--parkrun",
+                    help="parkrun name - defaults to 'hartlepool'")
+    ap.add_argument("-c", "--column", default=0,
+                    help="Table Column Number to analyse (Defaults to zero)")
+    ap.add_argument("-i", "--inFile",
+                    help="Input File Name for future roster html file (defaults to futureroster_<parkrun>.html)")
+    ap.add_argument("-o", "--outFile",
+                    help="Output Filename root (defaults to roster_<parkrun>")
+    ap.add_argument("-f", "--format",
+                    help="output format - defaults to 'png'")
+    ap.add_argument("--dl",
+                    help="Download the roster from the web site rather than loading from file",
+                    action="store_true")
 
 
-args = ap.parse_args()
+    args = ap.parse_args()
 
-debug = args.debug
-print(args)
+    debug = args.debug
+    print(args)
 
-if (args.column!=None):
-    column = int(args.column)
-else:
-    column = 0
+    if (args.column!=None):
+        column = int(args.column)
+    else:
+        column = 0
 
-if (args.parkrun!=None):
-    parkrun = args.parkrun
-else:
-    parkrun = "hartlepool"
+    if (args.parkrun!=None):
+        parkrun = args.parkrun
+    else:
+        parkrun = "hartlepool"
 
-if (args.format!=None):
-    filext = int(args.format)
-else:
-    filext = "png"
-
-
-if (args.inFile!=None):
-    inFile = args.inFile
-else:
-    inFile = "futureroster_%s.html" % parkrun
+    if (args.format!=None):
+        filext = int(args.format)
+    else:
+        filext = "png"
 
 
-if (args.outFile!=None):
-    outFile = args.outFile
-else:
-    outFile = "roster_%s.%s" % (parkrun, filext)
+    if (args.inFile!=None):
+        inFile = args.inFile
+    else:
+        inFile = "futureroster_%s.html" % parkrun
 
 
-if args.dl:
-    print("Downloading Roster from Web Site")
-    htmlStr = getRosterHtml.getRosterHtml(parkrun, debug)
-else:
-    print("Loading Roster from file %s" % inFile)
-    inf = open(inFile,"r")
-    htmlStr = inf.read()
-    inf.close()
+    if (args.outFile!=None):
+        outFile = args.outFile
+    else:
+        outFile = "roster_%s.%s" % (parkrun, filext)
 
-rosterData = getRosterData(htmlStr,column,debug)
-makeDashboardImage(rosterData,filext, outFile, debug)
+
+    if args.dl:
+        print("Downloading Roster from Web Site")
+        htmlStr = getRosterHtml.getRosterHtml(parkrun, debug)
+    else:
+        print("Loading Roster from file %s" % inFile)
+        inf = open(inFile,"r")
+        htmlStr = inf.read()
+        inf.close()
+
+    rosterData = getRosterData(htmlStr,column,debug)
+    makeDashboardImage(rosterData,filext, outFile, debug)
 
 

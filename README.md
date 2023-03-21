@@ -22,9 +22,12 @@ A tool to generate a traffic light dashboard showing the state of a Parkrun volu
       - sh get-docker.sh
   - Add the required user(s) to the new docker group in /et/group (then log out and back in again)
   - make build  (builds a docker container for the app)
-  - make start  (runs the app in a docker container)
+  - make start  (runs the app in a docker container) - web app should appear as localhost:56734
   - Install nginx
-  - Create a new site in /etc/nginx/sites-enabled
+  - Create a new site in /etc/nginx/sites-enabled using configuration file system/etc/nginx/sites-enabled/rosters
+  - restart nginx (system nginx restart)
+  - run certbot to create letsencrypt certificates for the new site
+  - restart nginx (at this point I am getting 502 Bad Gateway errors).
 
 
 
