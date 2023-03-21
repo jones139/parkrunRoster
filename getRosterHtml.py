@@ -20,11 +20,17 @@ def getRosterHtml(eventName, debug=False):
     user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64)'
     headers = {'User-Agent': user_agent}
     req = urllib.request.Request(url,None,headers)
-    response = urllib.request.urlopen(req)
-    if (debug): print(response.info())
-    htmlStr = response.read()
-    response.close()
-
+    try: 
+        response = urllib.request.urlopen(req)
+        if (debug): print(response.info())
+        htmlStr = response.read()
+        response.close()
+    except urllib.error.HTTPError as e:
+        print("Error Reading Roster from %s - error %s" % (url,e.code))
+        htmlStr = None
+    except urllib.error.URLError as e:
+        print("Error Reading Roster: Error %s" % e.reason)  
+        htmlStr = None  
     if (debug): print(htmlStr)
     return htmlStr
 
